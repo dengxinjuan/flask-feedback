@@ -105,14 +105,15 @@ def delete_user(username):
     return redirect("/login")
 
 
+# it always say get error and i dont know why
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def new_feedback(username):
     """Show add-feedback form and process it."""
 
+    form = FeedbackForm()
+
     if "username" not in session or username != session['username']:
         raise Unauthorized()
-
-    form = FeedbackForm()
 
     if form.validate_on_submit():
         title = form.title.data
