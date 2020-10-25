@@ -71,5 +71,18 @@ class User(db.Model):
         else:
             return False
     # end_authenticate  
+
+
+class Feedback(db.Model):
+    """define the feedback model"""
+
+    ___tablename___ = "feedbacks"
+
+    id = db.Column(db.Integer, primary_key=True,autoincrement = True)
+    title = db.Column(db.String(100),nullable = False)
+    content = db.Column(db.Text, nullable=False)
+    username = db.Column(db.Text, db.ForeignKey("users.username"),nullable=False)
+
+
     
 

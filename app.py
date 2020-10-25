@@ -1,7 +1,7 @@
 from flask import Flask, render_template,session,redirect
 from flask_debugtoolbar import DebugToolbarExtension
 
-from models import db,connect_db, User
+from models import db,connect_db, User,Feedback
 from forms import LoginForm,RegisterForm
 
 app = Flask(__name__)
