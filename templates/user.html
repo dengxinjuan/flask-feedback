@@ -6,8 +6,29 @@
 {{user.email}}
 {{user.first_name}}
 {{user.last_name}}
+
+<a href="/{{user.username}}/feedback/add" class="btn btn-success">add feedback</a>
+
+<ul>
+{%for d in user.feedback %}
+<li>{{d.title}}</li>
+{{d.content}}
+<a >edit</a>
+<a>delete</a>
+{%endfor%}
+</ul>
+
 </h1>
 
 <a href="/logout">Log Out</a>
+
+<form>
+    <button class="btn btn-danger btn-sm"
+            formaction="/users/{{ user.username }}/delete"
+            formmethod="POST">
+      Delete User
+    </button>
+  </form>
+  
 {%endblock%}
 
