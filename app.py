@@ -58,7 +58,7 @@ def login_user():
     """return login user form"""
     if "username" in session:
         return redirect(f"/users/{session['username']}")
-        
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -145,4 +145,41 @@ def new_feedback(username):
         return render_template("feedback.html", form=form)
 
 
+
+@app.route("/feedback/<int:feedback_id>/update", methods=["GET", "POST"])
+def update_feedback(feedback_id):
+    """Show update-feedback form and process it."""
+
+    feedback = Feedback.query.get(feedback_id)
+
+    if "username" not in session or feedback.username != session['username']:
+        raise Unauthorized()
+
+    form = FeedbackForm(obj=feedback)
+
+    if form.validate_on_submit():
+        feedback.title = form.title.data
+        feedback.content = form.content.data
+
+        db.session.commit()
+
+        return redirect(f"/users/{feedback.username}")
+
+    return render_template("update_feedback.html", form=form, feedback=feedback)
+
+
+@app.route("/feedback/<int:feedback_id>/delete", methods=["POST"])
+def delete_feedback(feedback_id):
+    """Delete feedback."""
+
+    feedback = Feedback.query.get(feedback_id)
+    if "username" not in session or feedback.username != session['username']:
+        raise Unauthorized()
+
+    db.session.delete(feedback)
+    db.session.commit()
+
+    return redirect(f"/users/{feedback.username}")
+
+    
 

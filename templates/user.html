@@ -7,14 +7,24 @@
 {{user.first_name}}
 {{user.last_name}}
 
-<a href="/{{user.username}}/feedback/add" class="btn btn-success">add feedback</a>
+<a href="/users/{{user.username}}/feedback/add" class="btn btn-success">add feedback</a>
 
 <ul>
 {%for d in user.feedback %}
 <li>{{d.title}}</li>
 {{d.content}}
-<a >edit</a>
-<a>delete</a>
+<form>
+<button class="btn btn-primary"
+formmethod="GET"
+formaction="/feedback/{{ d.id }}/update">
+Edit
+</button>
+<button class="btn btn-danger"
+formmethod="POST"
+formaction="/feedback/{{ d.id }}/delete">
+Delete
+</button>
+</form>
 {%endfor%}
 </ul>
 
@@ -31,4 +41,5 @@
   </form>
   
 {%endblock%}
+
 
