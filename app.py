@@ -5,7 +5,7 @@ from models import db,connect_db, User,Feedback
 from forms import LoginForm,RegisterForm,FeedbackForm
 
 app = Flask(__name__)
-app.debug = True
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgres:///flask-feedback"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -56,6 +56,9 @@ def register_user():
 @app.route("/login",methods=["GET","POST"])
 def login_user():
     """return login user form"""
+    if "username" in session:
+        return redirect(f"/users/{session['username']}")
+        
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -65,7 +68,7 @@ def login_user():
 
         if user:
             session['username'] = user.username
-            return redirect(f"/users/{username}")
+            return redirect(f"/users/{user.username}")
         else:
             form.username.errors = ["Password/Username Wrong!!!"]
             return render_template("login.html",form=form)
@@ -105,15 +108,23 @@ def delete_user(username):
     return redirect("/login")
 
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+
 # it always say get error and i dont know why
+
 @app.route("/users/<username>/feedback/add", methods=["GET", "POST"])
 def new_feedback(username):
     """Show add-feedback form and process it."""
 
-    form = FeedbackForm()
-
     if "username" not in session or username != session['username']:
         raise Unauthorized()
+
+    form = FeedbackForm()
 
     if form.validate_on_submit():
         title = form.title.data
@@ -132,5 +143,6 @@ def new_feedback(username):
 
     else:
         return render_template("feedback.html", form=form)
+
 
 
