@@ -1,5 +1,6 @@
 from flask import Flask, render_template,session,redirect
 from flask_debugtoolbar import DebugToolbarExtension
+import os
 
 from models import db,connect_db, User,Feedback
 from forms import LoginForm,RegisterForm,FeedbackForm
@@ -10,7 +11,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgres:///flask-feedback"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = "youdontknowthesecretkey"
+app.config['SECRET_KEY'] = os.environ.get('SERCET_KEY','idontbelievyou')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
